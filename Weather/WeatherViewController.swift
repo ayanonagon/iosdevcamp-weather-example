@@ -8,11 +8,29 @@
 
 import UIKit
 
-class WeatherViewController: UIViewController {
+protocol WeatherViewControllerDisplayable: Equatable {
+    var location: String { get }
+    var weather: String { get }
+    var temperatureFahrenheit: Double { get }
+}
+
+func ==<T: WeatherViewControllerDisplayable>(lhs: T, rhs: T) -> Bool {
+    return lhs.location == rhs.location &&
+    lhs.weather == rhs.weather &&
+    lhs.temperatureFahrenheit == rhs.temperatureFahrenheit
+}
+
+extension WeatherViewControllerDisplayable {
+    var formattedTemperatureFahrenheit: String {
+        return String(format: "%.0f°", temperatureFahrenheit)
+    }
+}
+
+class WeatherViewController <Displayable: WeatherViewControllerDisplayable>: UIViewController {
 
     // MARK: - Properties
 
-    let viewModel: WeatherViewModel
+    let displayable: Displayable
 
     private let containerView: UIStackView = {
         let view = UIStackView()
@@ -55,8 +73,8 @@ class WeatherViewController: UIViewController {
 
     // MARK: - Initializers
 
-    init(with viewModel: WeatherViewModel) {
-        self.viewModel = viewModel
+    init(with displayable: Displayable) {
+        self.displayable = displayable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,9 +88,9 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         view.layer.addSublayer(gradientLayer)
 
-        cityLabel.text = viewModel.city
-        weatherLabel.text = viewModel.weather
-        temperatureLabel.text = viewModel.temperature
+        cityLabel.text = displayable.location
+        weatherLabel.text = displayable.weather
+        temperatureLabel.text = displayable.formattedTemperatureFahrenheit
 
         containerView.addArrangedSubview(cityLabel)
         containerView.addArrangedSubview(weatherLabel)

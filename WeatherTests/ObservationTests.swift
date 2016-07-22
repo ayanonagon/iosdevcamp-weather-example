@@ -22,4 +22,13 @@ class ObservationTests: XCTestCase {
         XCTAssertEqualWithAccuracy(56.1, observation!.temperatureFahrenheit, accuracy: 0.001)
         XCTAssertEqualWithAccuracy(13.4, observation!.temperatureCelcius, accuracy: 0.001)
     }
+
+    func testWeatherViewControllerDisplayable() {
+        let json = loadJSONFixture(for: "observation")
+        let observation = Observation(dictionary: json)
+
+        XCTAssertEqual("San Francisco, CA", observation?.location)
+        XCTAssertEqual("Partly Cloudy", observation?.weather)
+        XCTAssertEqualWithAccuracy(13.4, observation!.temperatureCelcius, accuracy: 0.001)
+    }
 }

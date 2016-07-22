@@ -43,3 +43,9 @@ extension Observation: JSONDeserializable {
         self.temperatureFahrenheit = temperatureFahrenheit
     }
 }
+
+extension Observation: WeatherViewControllerDisplayable {
+    var location: String {
+        return displayLocation.fullCityName
+    }
+}

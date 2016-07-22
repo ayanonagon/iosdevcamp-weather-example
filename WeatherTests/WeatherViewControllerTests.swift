@@ -11,14 +11,23 @@ import XCTest
 
 class WeatherViewControllerTests: XCTestCase {
 
+    struct TestDisplayable: WeatherViewControllerDisplayable {
+        let location = "Washington DC"
+        let weather = "Omg Too Hot"
+        let temperatureFahrenheit: Double = 9001
+    }
+
     func testInitialization() {
-        let json = loadJSONFixture(for: "observation")
-        let observation = Observation(dictionary: json)!
-        let viewModel = WeatherViewModel(with: observation)
+        let displayable = TestDisplayable()
+        let viewController = WeatherViewController(with: displayable)
 
-        let viewController = WeatherViewController(with: viewModel)
+        XCTAssertEqual(displayable, viewController.displayable)
+    }
 
-        XCTAssertEqual(viewModel, viewController.viewModel)
+    func testWeatherViewControllerDisplayable() {
+        let displayable = TestDisplayable()
+        XCTAssertEqual("9001°", displayable.formattedTemperatureFahrenheit)
+    }
 
         // Test viewController.weatherLabel?
         // Test viewController.temperatureLabel?
@@ -83,7 +92,7 @@ class WeatherViewControllerTests: XCTestCase {
 
 
 
-        // More problems:
+        // Previous problems:
 
         // 1. Pretty annoying to test WeatherViewController.
         //    1. Load JSON.
@@ -91,6 +100,9 @@ class WeatherViewControllerTests: XCTestCase {
         //    3. Create WeatherViewModel with Observation.
         //    4. Initialize WeatherViewController with view model.
 
+        // => Much easier. Just create test type that conforms to
+        //    WeatherViewControllerDisplayable. No need to rely on
+        //    Observation.
 
 
 
@@ -98,6 +110,7 @@ class WeatherViewControllerTests: XCTestCase {
         // 2. We didn’t *really* decouple WeatherViewController
         //    and Observation. We just added a layer of indirection.
 
+        // => Decoupled using a protocol.
 
 
 
@@ -105,5 +118,33 @@ class WeatherViewControllerTests: XCTestCase {
         // 3. Now Observation and WeatherViewModel are tightly coupled.
         //    Makes more sense for WeatherViewModel and WeatherViewController
         //    to be more closely related.
-    }
+
+        // => WeatherViewController uses WeatherViewControllerDisplayable,
+        // which is decoupled from Observation.
+
+
+
+
+
+
+        // *Now* is it good enough? 🤔
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Maybe. ¯\_(ツ)_/¯
 }
