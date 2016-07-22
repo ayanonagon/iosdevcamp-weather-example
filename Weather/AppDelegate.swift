@@ -19,11 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let json = loadJSONFixture(for: "observation")
         let observation = Observation(dictionary: json)!
 
-        let viewController = WeatherViewController(with: observation)
+        let viewModel = WeatherViewModel(with: observation)
+        let viewController = WeatherViewController(with: viewModel)
+
         let window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window.rootViewController = viewController
         window.makeKeyAndVisible()
         self.window = window
+
         return true
     }
 

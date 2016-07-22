@@ -12,7 +12,7 @@ class WeatherViewController: UIViewController {
 
     // MARK: - Properties
 
-    let observation: Observation
+    let viewModel: WeatherViewModel
 
     private let containerView: UIStackView = {
         let view = UIStackView()
@@ -55,8 +55,8 @@ class WeatherViewController: UIViewController {
 
     // MARK: - Initializers
 
-    init(with observation: Observation) {
-        self.observation = observation
+    init(with viewModel: WeatherViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,9 +70,9 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         view.layer.addSublayer(gradientLayer)
 
-        cityLabel.text = observation.displayLocation.fullCityName
-        weatherLabel.text = observation.weather
-        temperatureLabel.text = String(format: "%.0f°", observation.temperatureFahrenheit)
+        cityLabel.text = viewModel.city
+        weatherLabel.text = viewModel.weather
+        temperatureLabel.text = viewModel.temperature
 
         containerView.addArrangedSubview(cityLabel)
         containerView.addArrangedSubview(weatherLabel)
